@@ -1,0 +1,140 @@
+:root {
+  color: white;
+  box-sizing: border-box;
+  --border: 2px solid rgba(208, 199, 199, 0.75);
+  overflow: hidden;
+}
+
+.title-font {
+  font-family: consolas, sans-serif;
+  padding: 0;
+  margin: 0;
+  font-size: 1vh;
+  align-self: flex-start;
+}
+
+#title {
+  font-family: consolas, sans-serif;
+  align-self: center;
+}
+.input {
+  grid-area: ed;
+  box-shadow: var(--drop-shadow);
+  margin-left: 1vw;
+  background: rgba(208, 199, 199, 0.25);
+  /* border-left: var(--border); */
+}
+.input h2 {
+  height: 2.5em;
+}
+.sidebar-header {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  font-size: 0.95vh;
+  height: 1.5vh;
+}
+.sidebar-header * {
+  margin: 0;
+  padding: 0;
+}
+.scripts {
+  width: 100%;
+  grid-area: sb;
+  font-family: "Roboto Mono", monospace;
+  background: var(--bg);
+  /* border-right: var(--border); */
+}
+.scripts-title {
+  height: 2vh;
+}
+.script-link {
+  background: rgba(58, 56, 56, 0.5);
+  padding-left: 0.25em !important;
+}
+.script-index,
+.script-index li,
+.script-index a {
+  text-decoration: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.script-index li {
+  line-height: 1.75em;
+}
+.output-terminal-gutter {
+  grid-area: br;
+  width: 100%;
+  /* justify-content: flex-start; */
+  /* border-top: var(--border); */
+}
+.controls {
+  width: 100%;
+  /* height: 50%; */
+  align-items: center;
+  justify-content: space-evenly;
+}
+.controls h3 {
+  align-self: center;
+  margin: 0 auto;
+  padding: 0;
+}
+.script-link:hover {
+  filter: brightness(200%);
+}
+.script-link a:visited {
+  color: white;
+}
+.script-index {
+  color: white;
+  background: inherit;
+  box-shadow: var(--drop-shadow);
+}
+textarea {
+  opacity: 50%;
+  color: white;
+  width: inherit;
+  height: fit-content;
+}
+.terminal {
+  /* border-top: 1px solid #ccc; */
+  width: 100%;
+  height: 100%;
+  grid-area: ot;
+  outline: 0;
+  padding: 1vh 1vw;
+}
+.terminal-col {
+  width: 85%;
+}
+.terminal-title {
+  padding-left: 1vw;
+}
+#script-output {
+  box-shadow: -4px 4px 2px 0 rgba(0,0,0,0.3);
+  border: 1px solid #ccc;
+  background: rgb(63, 82, 99);
+  margin: 1vh 1vw;
+  width: -webkit-fill-available;
+  height: 75%;
+}
+#title {
+  grid-area: tt;
+  padding-left: 0.66em;
+}
+.main {
+  display: grid !important;
+  background-color: var(--bg) !important;
+  grid-template-areas:
+    "tt tt tt tt"
+    "sb br br br"
+    "sb ed ed ed"
+    "ot ot ot ot";
+  grid-template-rows: 3em 3em 1fr 1fr 0.25fr;
+  grid-template-columns: 20vw 1fr 1fr 1fr;
+  height: 120dvh;
+  width: 100dvw;
+  padding: 0;
+  margin: 0;
+}

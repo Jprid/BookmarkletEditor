@@ -1,12 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>
+<style>
+  :root,
+  body {
+    box-sizing: border-box;
+    --bg: rgba(49, 75, 126, 1);
+    --light-alt: #4bb3fd;
+    --focus: #0496ff;
+    --yinmn-blue: #314b7eff;
+    --argentinian-blue: #4bb3fdff;
+    --dodger-blue: #0496ffff;
+    --carnation-pink: #ff99c8ff;
+    --lemon-chiffon: #fcf6bdff;
+    --breadcrumb-end: 0.5em;
+    --drop-shadow: -4px 4px 2px 0 rgba(0, 0, 0, 0.3);
+    --drop-shadow-alt: 0px 4px 2px 0 rgba(0, 0, 0, 0.3);
+    padding: 0;
+    margin: 0;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+  .row {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  .col {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+</style>

@@ -1,69 +1,91 @@
 <script lang="ts">
-    
-// @ts-nocheck
-    // import minifier from "html-minifier-terser";
-    import CodeMirror, { basicSetup } from "$lib/CodeMirror.svelte";
-    import { EditorView, minimalSetup } from "codemirror";
-    import {javascript} from "@codemirror/lang-javascript"
-    import { onMount } from "svelte";
-    let store;
-    function changeHandler ({ detail: {tr}}) {
-        if (detail !== undefined) if (tr !== undefined) console.log(tr?.changes?.toJSON());
-    }
-    let editorParent;
-    let output;
-    export let extensions = basicSetup
-    function minify() {
-        let s = editorParent?.state?.doc?.toString();
-        if (s !== undefined) {
-            const mini = s.replaceAll(/\s*\n+/g, "");
-            console.log(mini);
+  // @ts-nocheck
+  import CodeMirror from "$lib/CodeMirror.svelte";
+  import { onMount } from "svelte";
 
-            // const mini = minifier.minify(s);
-            output.textContent = `javascript:(${mini})`;
-        }
-    }
+  import "./+page.css";
+  import { ScriptService } from "$lib/script";
+  import { unminify } from "./page.ts";
+  import EditorControls from "$lib/EditorControls.svelte";
+  import TerminalControls from "$lib/TerminalControls.svelte";
+  import BreadCrumbs from "$lib/BreadCrumbs.svelte";
+  import { writable } from "svelte/store";
+  import { fileName } from "$lib/stores";
+  import {basicSetup} from "codemirror";
+  // /** @type {import('./$types').PageData} */
+  let scripts: any[] = [];
+  $: store = null;
+  let output;
+  let scriptService = new ScriptService();
+  export let extensions = basicSetup;
+  const DEFAULT_LINE_HEIGHT = 49;
 
-    onMount(() => {
-        editorParent = new EditorView({
-            doc: "function(){\n//...\n}()",
-            extensions: extensions,
-            language: [javascript()],
-            parent: editorParent,
-            // dispatch: changeHandler
-        })
-    })
+  let newLine = "\n".repeat(DEFAULT_LINE_HEIGHT);
+  // FUNCTIONS
+  let terminalControls = [{ fxn: clearTerminal, name: "Clear Terminal" }];
+  function clearTerminal() {
+    if (output !== undefined) {
+      output.textContent = "";
+    }
+  }
+  function loadScript(store: any, script: Script) {
+    if (script === undefined) return;
+    fileName.set(script.name);
+    decodeURI(script);
+    // console.log($store, script);
+    store.set(unminify(script.url));
+  }
+
+  onMount(async () => {
+    scripts = (await scriptService.getAll());
+    console.log(scripts);
+  });
 </script>
 
-<div class="col">
-    <h2 id="title">BookMarklet Editor</h2>
-    <div class="input" bind:this={editorParent}/>
-    <button class="button" type="button" on:click={minify}>
-    Minify
-    </button>
-    <textarea bind:this={output} name="output" id="script-output"></textarea>
+<div class="main col">
+  <h2 id="title">BookMarklet Editor</h2>
+  <div class="scripts">
+    {#if scripts.scripts !== undefined}
+      <div class="sidebar-header">
+        <h2 class="title-font scripts-title">Scripts:</h2>
+      </div>
+      <ul class="script-index">
+        {#each scripts.scripts[0] as script, i}
+          <li class="script-link pointer" id="script-{i}">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-file"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"
+              />
+            </svg>
+            <a href="" on:click={() => loadScript(store, script)}
+              >{script.name}</a
+            >
+          </li>
+        {/each}
+      </ul>
+    {/if}
+  </div>
+  <div class="row output-terminal-gutter">
+    <div class="col controls">
+      <EditorControls docStore={store} {output} {scriptService} />
+      <BreadCrumbs name={fileName} />
+    </div>
+  </div>
+  <div class="input">
+    <CodeMirror doc={newLine} extensions={basicSetup} bind:docStore={store} />
+  </div>
+  <div class="terminal row">
+    <TerminalControls ctrls={terminalControls}></TerminalControls>
+    <div class="terminal-col">
+      <h3 class="title-font terminal-title">Output:</h3>
+      <textarea bind:this={output} name="output" id="script-output"></textarea>
+    </div>
+  </div>
 </div>
-
-<style>
-    :root {
-        background: rgba(0, 0, 0, 0.95);
-        color: white;
-    }
-    #title {
-        font-family: consolas, sans-serif;
-        align-self: center;
-    }
-    .col {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-    .button {
-        margin-bottom: 5px;
-    }
-    textarea {
-        opacity: 50%;
-    }
-    .input {
-        height: 500px;
-    }
-</style>
